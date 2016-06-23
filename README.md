@@ -2,7 +2,7 @@
 
 `cyclophp` is a tool calculating cyclomatic complexity of public methods
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/itmh/cyclophp.svg?style=flat-square)](https://packagist.org/packages/itmh/cyclophp)pub
+[![Latest Stable Version](https://img.shields.io/packagist/v/itmh/cyclophp.svg?style=flat-square)](https://packagist.org/packages/itmh/cyclophp)
 
 ## Installation
 
