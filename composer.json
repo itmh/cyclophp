@@ -1,0 +1,12 @@
+{
+  "name": "itmh/cyclophp",
+  "description": "Инструмент для подсчёта цикломатики публичных методов",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Chshanovskiy Maxim",
+      "email": "chshanovskiy.maxim@itmh.ru"
+    }
+  ]
+}
