@@ -1,0 +1,17 @@
+{
+    "directories": [
+        "src"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": [
+                "Tests"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "main": "cyclophp",
+    "output": "cyclophp.phar",
+    "stub": true
+}
