@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+$files = [
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php'
+];
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        define('CYCLOPHP_COMPOSER_INSTALL', $file);
+        break;
+    }
+}
+
+if (!defined('CYCLOPHP_COMPOSER_INSTALL')) {
+    error_log('Не найден файл автозагрузки composer');
+    die(1);
+}
+
+require CYCLOPHP_COMPOSER_INSTALL;
+
+$application = new \Symfony\Component\Console\Application();
+$application->add(new \Cyclophp\RunCommand());
+$application->run();

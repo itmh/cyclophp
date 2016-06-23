@@ -8,5 +8,18 @@
       "name": "Chshanovskiy Maxim",
       "email": "chshanovskiy.maxim@itmh.ru"
     }
+  ],
+  "require": {
+    "symfony/console": "^3.1",
+    "symfony/finder": "^3.1",
+    "nikic/php-parser": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cyclophp\\": "src/"
+    }
+  },
+  "bin": [
+    "cyclophp"
   ]
 }
