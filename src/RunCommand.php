@@ -40,7 +40,7 @@ class RunCommand extends Command
 
     const OPTION_EXCLUDE = 'exclude';
     const OPTION_EXCLUDE_DESCRIPTION = 'Directory to exclude';
-    const OPTION_EXCLUDE_DEFAULT = ['vendor'];
+    const OPTION_EXCLUDE_DEFAULT = ['vendor', 'test'];
 
     const RESULT_HEADERS = ['Method', 'Complexity'];
 
