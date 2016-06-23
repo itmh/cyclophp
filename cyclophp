@@ -14,7 +14,7 @@ foreach ($files as $file) {
 }
 
 if (!defined('CYCLOPHP_COMPOSER_INSTALL')) {
-    error_log('Не найден файл автозагрузки composer');
+    error_log('Can not find composer autoload');
     die(1);
 }
 
