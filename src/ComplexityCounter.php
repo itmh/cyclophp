@@ -2,6 +2,8 @@
 
 namespace Cyclophp;
 
+use Symfony\Component\Console\Helper\ProgressBar;
+
 /**
  * Класс для подсчёта цикломатической сложности
  */
@@ -36,14 +38,16 @@ class ComplexityCounter
     /**
      * Вычисляет цикломатическую сложность для каждого метода
      *
-     * @param Method[] $methods Список методов
+     * @param Method[]    $methods  Список методов
+     * @param ProgressBar $progress Индикатор прогресса
      *
      * @return void
      */
-    public function count(array &$methods)
+    public function count(array &$methods, ProgressBar $progress)
     {
         foreach ($methods as $method) {
             $this->method($method);
+            $progress->advance();
         }
     }
 

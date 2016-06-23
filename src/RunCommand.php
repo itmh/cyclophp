@@ -5,6 +5,7 @@ use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -94,7 +95,10 @@ class RunCommand extends Command
         }
 
         // Подсчитываем цикломатическую сложность
-        (new ComplexityCounter())->count($methods);
+        $progress = new ProgressBar($output, count($methods));
+        $progress->start();
+        (new ComplexityCounter())->count($methods, $progress);
+        $progress->finish();
 
         // Сортируем методы
         (new Sorter())->sort(
@@ -128,6 +132,7 @@ class RunCommand extends Command
             $table->addRow([(string)$method, $method->complexity]);
         }
 
+        $output->writeln('');
         $table->render();
     }
 
