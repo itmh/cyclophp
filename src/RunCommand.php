@@ -34,6 +34,10 @@ class RunCommand extends Command
     const OPTION_SORT_BY_NAME = 'by-name';
     const OPTION_SORT_BY_NAME_DESCRIPTION = 'Sort by name instead of by complexity';
 
+    const OPTION_PUBLIC_ONLY = 'public-only';
+    const OPTION_PUBLIC_ONLY_DESCRIPTION = 'Analyze only public methods';
+    const OPTION_PUBLIC_ONLY_DEFAULT = 'yes';
+
     const RESULT_HEADERS = ['Method', 'Complexity'];
 
     /**
@@ -67,6 +71,13 @@ class RunCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 self::OPTION_SORT_BY_NAME_DESCRIPTION
+            )
+            ->addOption(
+                self::OPTION_PUBLIC_ONLY,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::OPTION_PUBLIC_ONLY_DESCRIPTION,
+                self::OPTION_PUBLIC_ONLY_DEFAULT
             );
     }
 
@@ -83,22 +94,22 @@ class RunCommand extends Command
         // Находим файлы
         $dir = $input->getArgument(self::ARGUMENT_DIR);
         $files = (new Finder())->files()->name('*.php')->in($dir);
-        if ($output->isVerbose()) {
-            $output->writeln(sprintf('Найдено файлов: %d', count($files)));
-        }
 
         // Извлекаем методы из файлов
+        $progress = new ProgressBar($output, count($files));
         $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $methods = (new SourceExtractor($files, $parser, new Standard()))->extract();
-        if ($output->isVerbose()) {
-            $output->writeln(sprintf('Найдено методов: %d', count($methods)));
-        }
+        $methods = (new SourceExtractor($parser, new Standard(), $progress))
+            ->setMode($input->getOption(self::OPTION_PUBLIC_ONLY) !== 'no')
+            ->extract($files);
+        $progress->finish();
+        $output->writeln('');
 
         // Подсчитываем цикломатическую сложность
         $progress = new ProgressBar($output, count($methods));
         $progress->start();
-        (new ComplexityCounter())->count($methods, $progress);
+        (new ComplexityCounter($progress))->count($methods);
         $progress->finish();
+        $output->writeln('');
 
         // Сортируем методы
         (new Sorter())->sort(
@@ -132,7 +143,6 @@ class RunCommand extends Command
             $table->addRow([(string)$method, $method->complexity]);
         }
 
-        $output->writeln('');
         $table->render();
     }
 

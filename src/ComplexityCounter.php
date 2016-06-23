@@ -36,18 +36,34 @@ class ComplexityCounter
     ];
 
     /**
+     * Индикатор прогресса
+     *
+     * @var ProgressBar
+     */
+    private $progressBar;
+
+    /**
+     * Конструктор
+     *
+     * @param ProgressBar $progressBar Индикатор прогресса
+     */
+    public function __construct(ProgressBar $progressBar)
+    {
+        $this->progressBar = $progressBar;
+    }
+
+    /**
      * Вычисляет цикломатическую сложность для каждого метода
      *
-     * @param Method[]    $methods  Список методов
-     * @param ProgressBar $progress Индикатор прогресса
+     * @param Method[] $methods Список методов
      *
      * @return void
      */
-    public function count(array &$methods, ProgressBar $progress)
+    public function count(array &$methods)
     {
         foreach ($methods as $method) {
             $this->method($method);
-            $progress->advance();
+            $this->progress();
         }
     }
 
@@ -70,5 +86,15 @@ class ComplexityCounter
                 $method->complexity++;
             }
         }
+    }
+
+    /**
+     * Инкременирует прогресс
+     *
+     * @return void
+     */
+    private function progress()
+    {
+        $this->progressBar->advance();
     }
 }

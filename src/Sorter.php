@@ -45,7 +45,7 @@ class Sorter
     private function byComplexity()
     {
         return function (Method $a, Method $b) {
-            return strcmp($b->complexity, $a->complexity);
+            return ($b->complexity - $a->complexity);
         };
     }
 
