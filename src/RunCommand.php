@@ -38,6 +38,10 @@ class RunCommand extends Command
     const OPTION_PUBLIC_ONLY_DESCRIPTION = 'Analyze only public methods';
     const OPTION_PUBLIC_ONLY_DEFAULT = 'yes';
 
+    const OPTION_EXCLUDE = 'exclude';
+    const OPTION_EXCLUDE_DESCRIPTION = 'Directory to exclude';
+    const OPTION_EXCLUDE_DEFAULT = ['vendor'];
+
     const RESULT_HEADERS = ['Method', 'Complexity'];
 
     /**
@@ -55,9 +59,9 @@ class RunCommand extends Command
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->addArgument(
                 self::ARGUMENT_DIR,
-                InputArgument::OPTIONAL,
+                (InputArgument::OPTIONAL | InputArgument::IS_ARRAY),
                 self::ARGUMENT_DIR_DESCRIPTION,
-                self::ARGUMENT_DIR_DEFAULT
+                [self::ARGUMENT_DIR_DEFAULT]
             )
             ->addOption(
                 self::OPTION_THRESHOLD,
@@ -78,6 +82,13 @@ class RunCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 self::OPTION_PUBLIC_ONLY_DESCRIPTION,
                 self::OPTION_PUBLIC_ONLY_DEFAULT
+            )
+            ->addOption(
+                self::OPTION_EXCLUDE,
+                null,
+                (InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),
+                self::OPTION_EXCLUDE_DESCRIPTION,
+                self::OPTION_EXCLUDE_DEFAULT
             );
     }
 
@@ -93,7 +104,8 @@ class RunCommand extends Command
     {
         // Находим файлы
         $dir = $input->getArgument(self::ARGUMENT_DIR);
-        $files = (new Finder())->files()->name('*.php')->in($dir);
+        $exclude = $input->getOption(self::OPTION_EXCLUDE);
+        $files = (new Finder())->files()->name('*.php')->in($dir)->exclude($exclude);
 
         // Извлекаем методы из файлов
         $progress = new ProgressBar($output, count($files));
