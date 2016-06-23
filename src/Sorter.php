@@ -49,6 +49,11 @@ class Sorter
         };
     }
 
+    /**
+     * Возвращает функцию сортировки по имени метода
+     *
+     * @return \Closure
+     */
     private function byName()
     {
         return function (Method $a, Method $b) {

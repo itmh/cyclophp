@@ -104,9 +104,7 @@ class RunCommand extends Command
                 : Sorter::BY_COMPLEXITY
         );
 
-        $threshold = (int)$input->getOption(self::OPTION_THRESHOLD);
-
-        $this->results($output, $methods, $threshold);
+        $this->results($output, $methods, (int)$input->getOption(self::OPTION_THRESHOLD));
     }
 
     /**
